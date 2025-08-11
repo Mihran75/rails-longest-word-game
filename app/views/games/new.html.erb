@@ -1,0 +1,52 @@
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white text-center">
+        <h1 class="display-4 mb-0">🎯 The Longest Word</h1>
+      </div>
+
+      <div class="card-body">
+        <% if session[:total_score] %>
+          <div class="alert alert-info text-center">
+            <strong>Score Total: <%= session[:total_score] %> points</strong>
+          </div>
+        <% end %>
+
+        <div class="text-center mb-4">
+          <h3>Here is your grid :</h3>
+          <div class="letters-grid d-flex justify-content-center flex-wrap gap-2 my-4">
+            <% @letters.each do |letter| %>
+              <span class="badge bg-secondary fs-3 p-3 letter-badge"><%= letter %></span>
+            <% end %>
+          </div>
+        </div>
+
+        <%= form_with url: score_path, method: :post, local: true, data: { turbo: false }, class: "text-center" do |form| %>
+          <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+          <%= hidden_field_tag :letters, @letters.join(' ') %>
+          <%= hidden_field_tag :start_time, Time.now %>
+
+          <div class="mb-3">
+            <label for="word" class="form-label fs-5">
+              <strong>What is your longest word?</strong>
+            </label>
+            <%= form.text_field :word,
+                placeholder: "Type your word here...",
+                class: "form-control form-control-lg text-center text-uppercase",
+                required: true,
+                autofocus: true %>
+          </div>
+
+          <%= form.submit "PLAY !", class: "btn btn-success btn-lg px-5" %>
+        <% end %>
+
+        <div class="text-center mt-4">
+          <small class="text-muted">
+            <strong>RULES :</strong> Form the longest word possible with the given letters.
+Each letter can only be used once. !
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
